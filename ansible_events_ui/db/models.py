@@ -74,6 +74,49 @@ rules = sqlalchemy.Table(
     ),
 )
 
+audit_rules = sqlalchemy.Table(
+    "audit_rule",
+    metadata,
+    sqlalchemy.Column(
+        "id",
+        sqlalchemy.Integer,
+        sqlalchemy.Identity(always=True),
+        primary_key=True,
+    ),
+    sqlalchemy.Column("name", sqlalchemy.String),
+    sqlalchemy.Column("description", sqlalchemy.String),
+    sqlalchemy.Column("status", sqlalchemy.String),
+    sqlalchemy.Column("fired_date", sqlalchemy.String),
+    sqlalchemy.Column(
+        "created_at",
+        sqlalchemy.DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+    ),
+    sqlalchemy.Column(
+        "definition", postgresql.JSONB(none_as_null=True), nullable=False
+    ),
+    sqlalchemy.Column(
+        "rule_id",
+        sqlalchemy.ForeignKey("rule.id"),
+        nullable=False,
+    ),
+    sqlalchemy.Column(
+        "ruleset_id",
+        sqlalchemy.ForeignKey("ruleset.id"),
+        nullable=False,
+    ),
+    sqlalchemy.Column(
+        "activation_instance_id",
+        sqlalchemy.ForeignKey("activation_instance.id"),
+        nullable=False,
+    ),
+    sqlalchemy.Column(
+        "job_instance_id",
+        sqlalchemy.ForeignKey("job_instance.id"),
+    ),
+)
+
 
 inventories = sqlalchemy.Table(
     "inventory",
